@@ -1,0 +1,20 @@
+# Deploy the controller into SPCS itself:
+#   CREATE SERVICE MY_DB.OPS.SPARGO IN COMPUTE POOL OPS_POOL
+#     FROM @MY_DB.OPS.SPECS SPECIFICATION_FILE='controller-service.yaml'
+#     EXTERNAL_ACCESS_INTEGRATIONS = (GITHUB_EAI);   -- lets it reach your git host
+# Inside SPCS the controller authenticates with the rotating OAuth token at
+# /snowflake/session/token (auto-detected), acting as the service's owner role.
+# GRANT that role: CREATE SERVICE + USAGE on target schemas, USAGE/MONITOR on compute pools, BIND SERVICE ENDPOINT if needed.
+spec:
+  containers:
+    - name: spargo
+      image: /MY_DB/OPS/IMAGES/spargo:0.1.0
+      args: ["--interval", "30", "/apps/application.yaml"]
+      volumeMounts:
+        - name: apps
+          mountPath: /apps
+      resources:
+        requests: {cpu: 0.25, memory: 256M}
+  volumes:
+    - name: apps
+      source: "@MY_DB.OPS.APPS"     # stage holding Application manifests

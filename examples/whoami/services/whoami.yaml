@@ -1,0 +1,21 @@
+apiVersion: spargo/v1
+kind: Service
+metadata:
+  name: WHOAMI
+spec:
+  computePool: WHOAMI_POOL
+  replicas: 3                # -> MIN_INSTANCES = MAX_INSTANCES = 3
+  # or, to let Snowflake autoscale on CPU/memory:
+  # autoscaling: {minReplicas: 2, maxReplicas: 6}
+  specification:
+    spec:
+      containers:
+        - name: whoami
+          image: /APPS/PUBLIC/IMAGES/whoami:latest   # SPCS image-repository path
+          args: ["--port", "8080"]
+          resources:
+            requests: {cpu: 0.25, memory: 128M}
+      endpoints:
+        - name: web
+          port: 8080
+          public: true

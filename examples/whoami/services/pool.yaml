@@ -1,0 +1,9 @@
+apiVersion: spargo/v1
+kind: ComputePool
+metadata:
+  name: WHOAMI_POOL
+spec:
+  instanceFamily: CPU_X64_XS
+  minNodes: 1
+  maxNodes: 3
+  autoSuspendSecs: 600

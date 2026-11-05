@@ -1,0 +1,20 @@
+apiVersion: spargo/v1
+kind: Application
+metadata:
+  name: whoami
+spec:
+  source:
+    repoURL: .               # a git URL, or a local path (relative to this file)
+    targetRevision: HEAD
+    path: services
+  destination:
+    database: APPS
+    schema: PUBLIC
+    # role: SPARGO_ROLE
+    # warehouse: SPARGO_WH
+  syncPolicy:
+    automated:
+      prune: true            # delete managed services removed from git
+      selfHeal: true         # revert out-of-band changes
+    waitForHealthy: true
+    timeoutSeconds: 120

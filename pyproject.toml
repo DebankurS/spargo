@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spargo"
+version = "0.1.0"
+description = "GitOps continuous delivery for Snowpark Container Services (an Argo CD equivalent), plus a local SPCS emulator"
+requires-python = ">=3.10"
+dependencies = ["pyyaml>=6"]
+
+[project.optional-dependencies]
+keypair = ["cryptography>=41"]
+dev = ["pytest", "cryptography>=41"]
+
+[project.scripts]
+spargo = "spargo.cli:main"
+spcs-emulator = "spcs_emulator.server:main"
+
+[tool.setuptools]
+packages = ["spargo", "spcs_emulator"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["docker: needs a local docker daemon"]
